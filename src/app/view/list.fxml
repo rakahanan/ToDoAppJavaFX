@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
+         type="javafx.scene.control.ListCell">
+    <graphic>
+        <AnchorPane prefHeight="50.0">
+            <children>
+                <Label fx:id="lblTitle" layoutX="14.0" layoutY="17.0" text="Label"/>
+                <Button fx:id="btnDelete" layoutX="558.0" layoutY="12.0" mnemonicParsing="false"
+                        style="-fx-cursor: hand;" text="Delete"/>
+                <Button fx:id="btnEdit" layoutX="507.0" layoutY="12.0" mnemonicParsing="false" style="-fx-cursor: hand;"
+                        text="Edit"/>
+            </children>
+        </AnchorPane>
+    </graphic>
+</fx:root>
