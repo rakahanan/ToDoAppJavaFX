@@ -19,15 +19,6 @@ public class SQLiteHelper {
         return connection;
     }
 
-    public static Boolean isConnected() {
-        try {
-            return !getConnection().isClosed();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public static void closeConnection() {
         try {
             getConnection().close();

@@ -1,14 +1,22 @@
 package app.customview;
 
+import app.App;
+import app.Const;
+import app.controller.Form;
 import app.data.NoteHelper;
 import app.model.Note;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public final class NoteCell extends ListCell<Note> {
+    @FXML
+    private CheckBox ckbxStatus;
     @FXML
     private Label lblTitle;
     @FXML
@@ -18,14 +26,17 @@ public final class NoteCell extends ListCell<Note> {
 
     private ListView<Note> listView;
 
-    public NoteCell(ListView<Note> listView) {
+    private Stage formStage;
+
+    public NoteCell(ListView<Note> listView, Stage formStage) {
         this.listView = listView;
+        this.formStage = formStage;
         loadFXML();
     }
 
     private void loadFXML() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/view/list.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/app/view/item.fxml"));
             loader.setController(this);
             loader.setRoot(this);
             loader.load();
@@ -42,14 +53,41 @@ public final class NoteCell extends ListCell<Note> {
             setText(null);
             setContentDisplay(ContentDisplay.TEXT_ONLY);
         } else {
-            lblTitle.setText(note.getTitle());
+            ckbxStatus.setSelected(note.getDone() == 1);
+
+            lblTitle.setText(note.getTitle().length() > 50 ? note.getTitle().substring(0, 50) : note.getTitle());
+
             btnEdit.setOnAction(actionEvent -> {
-                System.out.print(note.getId());
+                try {
+                    FXMLLoader loader = new FXMLLoader();
+                    Parent root = loader.load(getClass().getResource("/app/view/form.fxml").openStream());
+                    Form formController = loader.getController();
+                    formController.setNote(note);
+                    formStage.setTitle("Edit Note");
+                    formStage.setScene(new Scene(root));
+                    formStage.setResizable(false);
+                    formStage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
+
             btnDelete.setOnAction(actionEvent -> {
                 NoteHelper noteHelper = new NoteHelper();
                 noteHelper.deleteNote(note);
+
                 listView.getItems().remove(note);
+            });
+
+            ckbxStatus.setOnAction(actionEvent -> {
+                int done = ckbxStatus.isSelected() ? 1 : 0;
+                Note newNote = new Note(note.getId(), note.getTitle(), note.getDescription(), done);
+
+                NoteHelper noteHelper = new NoteHelper();
+                noteHelper.updateNote(newNote);
+
+                if (App.filterStatus.equals(Const.DONE) && done == 0 || App.filterStatus.equals(Const.UNDONE) && done == 1)
+                    listView.getItems().remove(note);
             });
 
             setContentDisplay(ContentDisplay.GRAPHIC_ONLY);

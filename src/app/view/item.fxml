@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="50.0" prefWidth="674.0" type="javafx.scene.control.ListCell"
+         xmlns="http://javafx.com/javafx/11.0.1">
+    <graphic>
+        <AnchorPane style="-fx-border-width: 1px; -fx-border-color: #000;">
+            <children>
+                <Label fx:id="lblTitle" layoutX="56.0" layoutY="13.0" text="Label"/>
+                <Button fx:id="btnDelete" layoutX="583.0" layoutY="8.0" mnemonicParsing="false"
+                        style="-fx-cursor: hand;" text="Delete"/>
+                <Button fx:id="btnEdit" layoutX="529.0" layoutY="8.0" mnemonicParsing="false" style="-fx-cursor: hand;"
+                        text="Edit"/>
+                <Line endX="2.5" endY="15.0" layoutX="515.0" layoutY="18.0" startX="2.5" startY="-9.0"/>
+                <Line endX="2.5" endY="15.0" layoutX="42.0" layoutY="18.0" startX="2.5" startY="-9.0"/>
+                <CheckBox fx:id="ckbxStatus" layoutX="14.0" layoutY="12.0" mnemonicParsing="false"
+                          style="-fx-cursor: hand;"/>
+            </children>
+        </AnchorPane>
+    </graphic>
+</fx:root>

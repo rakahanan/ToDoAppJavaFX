@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.App;
 import app.Const;
 import app.customview.NoteCellFactory;
 import app.data.NoteHelper;
@@ -37,7 +38,6 @@ public class Dashboard implements Initializable {
 
     private NoteHelper noteHelper = new NoteHelper();
     private ObservableList<Note> notes = FXCollections.observableArrayList();
-    private String status;
     private Stage formStage = new Stage();
 
     @Override
@@ -56,9 +56,12 @@ public class Dashboard implements Initializable {
         setListener();
         setData(cmbxShow.getValue());
 
-        listView.setCellFactory(new NoteCellFactory());
+        listView.setCellFactory(new NoteCellFactory(formStage));
 
         listView.setItems(notes);
+
+        listView.setFocusTraversable(false);
+
     }
 
     private void setListener() {
@@ -68,11 +71,6 @@ public class Dashboard implements Initializable {
 
         formStage.setOnHiding(windowEvent -> {
             setData();
-        });
-
-        listView.setOnMouseClicked(mouseEvent -> {
-            Note note = listView.getSelectionModel().getSelectedItem();
-            System.out.print(note.getId());
         });
     }
 
@@ -84,9 +82,9 @@ public class Dashboard implements Initializable {
         try {
             ResultSet resultSet;
 
-            if (!selected.equals("")) status = selected;
+            if (!selected.equals("")) App.filterStatus = selected;
 
-            switch (status) {
+            switch (App.filterStatus) {
                 case Const.DONE:
                     resultSet = noteHelper.notesDone();
                     break;
@@ -111,8 +109,6 @@ public class Dashboard implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader();
             Parent root = loader.load(getClass().getResource("/app/view/form.fxml").openStream());
-            Form form = loader.getController();
-
             formStage.setTitle("Add Note");
             formStage.setScene(new Scene(root));
             formStage.setResizable(false);

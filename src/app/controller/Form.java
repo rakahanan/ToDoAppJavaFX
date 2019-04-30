@@ -4,10 +4,7 @@ import app.data.NoteHelper;
 import app.model.Note;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -23,8 +20,12 @@ public class Form implements Initializable {
     private Button btnSave;
     @FXML
     private Label lblUncomplete;
+    @FXML
+    private CheckBox ckbxDone;
 
     private NoteHelper noteHelper = new NoteHelper();
+
+    private int noteId = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -48,14 +49,23 @@ public class Form implements Initializable {
         });
     }
 
-    void setTitle(String jancok) {
-        fieldTitle.setText(jancok);
+    public void setNote(Note note) {
+        if (note != null) {
+            noteId = note.getId();
+            fieldTitle.setText(note.getTitle());
+            areaDesc.setText(note.getDescription());
+            if (note.getDone() == 1) ckbxDone.setSelected(true);
+        }
     }
 
     private void addNote() {
         if (!fieldTitle.getText().equals("") && !areaDesc.getText().equals("")) {
-            Note note = new Note(0, fieldTitle.getText(), areaDesc.getText(), 0);
-            noteHelper.saveNote(note);
+            int done = ckbxDone.isSelected() ? 1 : 0;
+            Note note = new Note(noteId, fieldTitle.getText(), areaDesc.getText(), done);
+
+            if (noteId == 0) noteHelper.saveNote(note);
+            else noteHelper.updateNote(note);
+
             Stage stage = (Stage) btnSave.getScene().getWindow();
             stage.close();
         } else {

@@ -55,6 +55,19 @@ public class NoteHelper {
         }
     }
 
+    public void updateNote(Note note) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE notes SET title = ?, description = ?, done = ? WHERE id = ?;");
+            preparedStatement.setString(1, note.getTitle());
+            preparedStatement.setString(2, note.getDescription());
+            preparedStatement.setInt(3, note.getDone());
+            preparedStatement.setInt(4, note.getId());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void deleteNote(Note note) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM notes WHERE id = ?");
