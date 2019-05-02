@@ -7,7 +7,7 @@ public class SQLiteHelper {
     private static Connection connection;
     private static boolean hasData = false;
 
-    public static Connection getConnection() {
+    static Connection getConnection() {
         try {
             if (connection == null) {
                 Class.forName("org.sqlite.JDBC");
