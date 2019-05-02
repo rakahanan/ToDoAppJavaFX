@@ -33,7 +33,7 @@ public class SQLiteHelper {
             ResultSet resultSet = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'notes'");
 
             if (!resultSet.next()) {
-                System.out.println("Building the tables.");
+                System.out.println("Building tables.");
                 Statement statementCreate = getConnection().createStatement();
                 statementCreate.execute("CREATE TABLE notes" +
                         "(id integer, " +
