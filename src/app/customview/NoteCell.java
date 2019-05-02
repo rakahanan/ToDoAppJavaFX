@@ -28,7 +28,7 @@ public final class NoteCell extends ListCell<Note> {
 
     private Stage formStage;
 
-    public NoteCell(ListView<Note> listView, Stage formStage) {
+    NoteCell(ListView<Note> listView, Stage formStage) {
         this.listView = listView;
         this.formStage = formStage;
         loadFXML();
@@ -54,7 +54,6 @@ public final class NoteCell extends ListCell<Note> {
             setContentDisplay(ContentDisplay.TEXT_ONLY);
         } else {
             ckbxStatus.setSelected(note.getDone() == 1);
-
             lblTitle.setText(note.getTitle().length() > 50 ? note.getTitle().substring(0, 50) : note.getTitle());
 
             btnEdit.setOnAction(actionEvent -> {
@@ -81,10 +80,10 @@ public final class NoteCell extends ListCell<Note> {
 
             ckbxStatus.setOnAction(actionEvent -> {
                 int done = ckbxStatus.isSelected() ? 1 : 0;
-                Note newNote = new Note(note.getId(), note.getTitle(), note.getDescription(), done);
+                note.setDone(done);
 
                 NoteHelper noteHelper = new NoteHelper();
-                noteHelper.updateNote(newNote);
+                noteHelper.updateNote(note);
 
                 if (App.filterStatus.equals(Const.DONE) && done == 0 || App.filterStatus.equals(Const.UNDONE) && done == 1)
                     listView.getItems().remove(note);
