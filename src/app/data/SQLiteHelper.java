@@ -5,7 +5,6 @@ import java.sql.*;
 public class SQLiteHelper {
 
     private static Connection connection;
-    private static boolean hasData = false;
 
     static Connection getConnection() {
         try {
@@ -28,22 +27,18 @@ public class SQLiteHelper {
     }
 
     public static void initialize() throws SQLException {
-        if (!hasData) {
-            Statement statement = getConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'notes'");
+        Statement statement = getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'notes'");
 
-            if (!resultSet.next()) {
-                System.out.println("Building tables.");
-                Statement statementCreate = getConnection().createStatement();
-                statementCreate.execute("CREATE TABLE notes" +
-                        "(id integer, " +
-                        "title varchar(60)," +
-                        "description text," +
-                        "done numeric(1)," +
-                        "primary key (id));");
-            }
-
-            hasData = true;
+        if (!resultSet.next()) {
+            System.out.println("Building tables.");
+            Statement statementCreate = getConnection().createStatement();
+            statementCreate.execute("CREATE TABLE notes" +
+                    "(id integer, " +
+                    "title varchar(60)," +
+                    "description text," +
+                    "done numeric(1)," +
+                    "primary key (id));");
         }
     }
 

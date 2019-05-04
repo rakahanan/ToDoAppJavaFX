@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,10 +30,7 @@ public class Dashboard implements Initializable {
     @FXML
     private ListView<Note> listView;
     @FXML
-    private TableView<?> tableView;
-    @FXML
     private ComboBox<String> cmbxShow;
-
 
     private NoteHelper noteHelper = new NoteHelper();
     private ObservableList<Note> notes = FXCollections.observableArrayList();
@@ -65,20 +61,18 @@ public class Dashboard implements Initializable {
     }
 
     private void setListener() {
-        btnAdd.setOnAction(actionEvent -> showAddWindow());
+        btnAdd.setOnAction(actionEvent -> showFormWindow());
 
         cmbxShow.valueProperty().addListener((observableValue, s, t1) -> setData(t1));
 
-        formStage.setOnHiding(windowEvent -> {
-            setData();
-        });
+        formStage.setOnHiding(windowEvent -> setData());
     }
 
-    void setData() {
+    private void setData() {
         setData("");
     }
 
-    void setData(String selected) {
+    private void setData(String selected) {
         try {
             ResultSet resultSet;
 
@@ -98,14 +92,20 @@ public class Dashboard implements Initializable {
 
             notes.clear();
             while (resultSet.next()) {
-                notes.add(new Note(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getInt("done")));
+                notes.add(new Note(
+                                resultSet.getInt("id"),
+                                resultSet.getString("title"),
+                                resultSet.getString("description"),
+                                resultSet.getInt("done")
+                        )
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void showAddWindow() {
+    private void showFormWindow() {
         try {
             FXMLLoader loader = new FXMLLoader();
             Parent root = loader.load(getClass().getResource("/app/view/form.fxml").openStream());
